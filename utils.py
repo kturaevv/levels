@@ -16,7 +16,7 @@ def progress():
         bar.progress(i + 1)
     'Done!'
 
-@st.cache(show_spinner=True)
+@st.cache(show_spinner=False)
 def get_trading_pair(name="BTC-USD", period="5d", interval="30m") -> pd.DataFrame:
     # valid periods: 1d,5d,1mo,3mo,6mo,1y,2y,5y,10y,ytd,max
     # valid intervals: 1m,2m,5m,15m,30m,60m,90m,1h,1d,5d,1wk,1mo,3mo
@@ -26,11 +26,11 @@ def get_trading_pair(name="BTC-USD", period="5d", interval="30m") -> pd.DataFram
     df.reset_index(inplace=True)
     return df
 
-@st.cache(show_spinner=True, allow_output_mutation=True)
+@st.cache(show_spinner=False, allow_output_mutation=True)
 def chart_(data: pd.DataFrame, height=600):
         
     base = alt.Chart(data).encode(
-        alt.X('Datetime:T', axis=alt.Axis(labelAngle=-45)),
+        alt.X(f'{data.columns[0]}:T', axis=alt.Axis(labelAngle=-45)),
         color=alt.condition("datum.Open <= datum.Close", alt.value("#06982d"), alt.value("#ae1325"))
     )
 
@@ -41,7 +41,7 @@ def chart_(data: pd.DataFrame, height=600):
 
     return chart
 
-@st.cache(show_spinner=True, allow_output_mutation=True)
+@st.cache(show_spinner=False, allow_output_mutation=True)
 def levels_(data: pd.DataFrame, saturation_point=0.5, color_value="#fa8d0b"):
     levels = KmeansSupportResistance(data[['Low']], saturation_point=saturation_point).levels
     levels = pd.DataFrame({'Low': levels})
