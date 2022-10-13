@@ -10,14 +10,15 @@ st.set_page_config(layout="wide", initial_sidebar_state="expanded")
 
 st.title('Automatic support resistance levels.')
 
-period, interval, saturation_point = st.columns(3)
+pair, period, interval, saturation_point = st.columns(4)
 
+pair = pair.text_input("Currency Pair", "BTC-USD", max_chars=10)
 period = period.selectbox("Period", PERIOD, 1)
 interval = interval.selectbox("Interval", INTERVAL, 4)
 sp = saturation_point.slider('Select saturation point.', min_value=0.0, max_value=1.0, value=0.5, step=0.05)
 # h = chart_height.slider("Chart Height", min_value=300, max_value=1200, value=600, step=10)
 
-data = get_trading_pair('BTC-USD', period, interval)
+data = get_trading_pair(pair, period, interval)
 
 levels = levels_(data, saturation_point=sp)
 
